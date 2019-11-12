@@ -1,4 +1,4 @@
-%% SOLUCIÓN NUMÉRICA ESTACIONARIA PARA PERFILES DELGADOS. 
+%% SOLUCIÃ“N NUMÃ‰RICA ESTACIONARIA PARA PERFILES DELGADOS. 
 %% PERFIL SIN CURVATURA CON ANGULO DE ATAQUE 
 
 %% Datos de entrada 
@@ -69,7 +69,7 @@ cL=sum(cl);
 Cm0=sum(dM)/(Que*c^2); 
 %% Ploteo del coeficiente de presiones 
 plot(xg/c,dcp,'Linewidth',2,'color','blue') 
-title({['Perfil delgado sin curvatura'],['Distribucion del coeficiente de Presiones cp(\eta), N=' num2str(n) ',\alpha=' num2str(alpha0) 'º']})
+title({['Perfil delgado sin curvatura'],['Distribucion del coeficiente de Presiones cp(\eta), N=' num2str(n) ',\alpha=' num2str(alpha0) 'Âº']})
 xlabel('\eta=X/c') 
 ylabel('Coeficiente de Presiones \Deltacp(X)') 
-legend('Solucion Numérica')
+legend('Solucion NumÃ©rica')
