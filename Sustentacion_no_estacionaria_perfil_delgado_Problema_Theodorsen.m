@@ -1,5 +1,12 @@
-%% SOLUCI覰 NUM蒖ICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
+%% SOLUCI脫N NUM脡RICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
 %% PERFIL OSCILANTE CON DESPLAZAMIENTO VERTICAL. FUNCION DE THEODORSEN 
+% 
+% Autor: 脕lvaro Fern谩ndez Villar
+% Este c贸digo forma parte del trabajo final de M谩ster: 
+% Soluci贸n num茅rica de problemas aerodin谩micos no estacionarios mediante el m茅todo de la malla de torbellinos.
+% Consultar trabajo para m谩s referencias.
+%
+%-----------------------------------------------------------C脫DIGO----------------------------------------------------------------------%
 
 %% Datos de entrada 
 % Numero de paneles en el perfil 
@@ -155,9 +162,9 @@ plot(tau,real(cl),'Linewidth',3,'color','red')
 plot(tau,real(clexacto),'-d','MarkerIndices',1:10:length(clexacto),'Linewidth',2,'color','black') 
 % Coeficiente de sustentacion cuasi-estacionario. 
 plot(tau,real(clquasi),'-v','MarkerIndices',1:10:length(clquasi),'color',[0.5,0,1],'Linewidth',2) 
-title(['Coeficiente de Sustentaci髇 CL(\tau), n=' num2str(n) ', m=' num2str(m) ', \kappa=' num2str(kappa) ', \Delta\xi=' num2str(dxw)]) 
+title(['Coeficiente de Sustentaci贸n CL(\tau), n=' num2str(n) ', m=' num2str(m) ', \kappa=' num2str(kappa) ', \Delta\xi=' num2str(dxw)]) 
 xlabel('Tiempo adimensional \tau, tau=t/Tr, Tr=b/U\infty') 
-ylabel('Coeficiente de Sustentaci髇 CL(\tau)') 
+ylabel('Coeficiente de Sustentaci贸n CL(\tau)') 
 legend('Solucion numerica', 'Solucion Theodorsen', 'Solucion cuasi-estacionaria')
 
 %% Funcion de Theodorsen
