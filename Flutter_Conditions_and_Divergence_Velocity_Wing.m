@@ -1,8 +1,15 @@
 %% NOMBRE: FLAMEO3DDOMINIOFRECUENCIA.m 
 % CALCULO DE LA ECUACION AEROELASTICA Y CALCULO DE LAS CONDICIONES DE FLAMEO Y 
 % VELOCIDAD DE DIVERGENCIA ESTATICA EN EL DOMINIO DE LA FRECUENCIA PARA UN ALA SEMIEMPOTRADA 
+% 
+% Autor: √Ålvaro Fern√°ndez Villar
+% Este c√≥digo forma parte del trabajo final de M√°ster: 
+% Soluci√≥n num√©rica de problemas aerodin√°micos no estacionarios mediante el m√©todo de la malla de torbellinos.
+% Consultar trabajo para m√°s referencias.
+%
+%-----------------------------------------------------------C√ìDIGO----------------------------------------------------------------------%
 
-%% Par·metros de entrada 
+%% Par√°metros de entrada 
 % Cuerda del ala en voladizo 
 c=0.2; 
 % Envergadura del ala en voladizo 
@@ -11,7 +18,7 @@ s=0.6;
 h=0.001; 
 % Densidad del aluminio 
 rhom=2770; 
-% MÛdulo de Young del aluminio 
+% M√≥dulo de Young del aluminio 
 Eyoungs=68.7e9; 
 % Coeficiente de Poisson del aluminio 
 nu=0.33; 
@@ -19,8 +26,8 @@ nu=0.33;
 Dstiff=Eyoungs*h^3/12/(1-nu^2); 
 % Densidad del aire 
 rho=1.225; 
-%% Malla de integraciÛn numÈrica 
-% N˙mero de puntos en la direccion de la cuerda y de la envergadura 
+%% Malla de integraci√≥n num√©rica 
+% N√∫mero de puntos en la direccion de la cuerda y de la envergadura 
 npoints=21; 
 % Mallado en la direccion de la cuerda 
 x=linspace(0,1,npoints); 
@@ -41,7 +48,7 @@ Y=Y';
 xmodos=4; 
 % Numero de modos en la direccion de la envergadura 
 ymodos=4; 
-% N˙mero de modos totales 
+% N√∫mero de modos totales 
 nmodos_out=xmodos*ymodos; 
 % Calculo de las formas modales. 
 [w,wxx,wyy,wxy,wx,wy]=formasmodales(xmodos,ymodos,nmodos_out,X,Y);
@@ -81,7 +88,7 @@ for i=1:nmodos
         E(i,j)=simpson2D(integrand,dx,dy); 
     end
 end
-%% MÈtodo del UVLM 
+%% M√©todo del UVLM 
 % Numero de paneles en la direccion de la cuerda 
 mv=30; 
 % Numero de paneles en la direccion de la envergadura 
@@ -93,24 +100,24 @@ b=2*s;
 cm=c/2; 
 % Relacion de aspecto del ala aerodinamica 
 AR=b/c; 
-% ¡ngulo de ataque (Debe ser cero. No esta implementado el metodo para 
+% √Ångulo de ataque (Debe ser cero. No esta implementado el metodo para 
 % otros angulos de ataque)
 alpha=0*pi/180; 
 % Longitud de la estela 
 cw=10*c; 
 % Multiplo de la longitud de la cuerda del ala 
 % Calculo de los puntos de las esquinas de los paneles del ala 
-% C·lculo de los nodos del ala 
+% C√°lculo de los nodos del ala 
 Nodosala = MatrizNodos(mv,nv,0,0,b,c); 
-% Coordendas de los nodos en la direcciÛn de la envergadura 
+% Coordendas de los nodos en la direcci√≥n de la envergadura 
 nodosy=Nodosala(:,5)'; 
-% Matriz de coordenadas de los nodos en la direcciÛn de la envergadura 
+% Matriz de coordenadas de los nodos en la direcci√≥n de la envergadura 
 yp=vec2mat(nodosy,nv+1); 
-% Coordenadas de los nodos en la direcciÛn de la cuerda 
+% Coordenadas de los nodos en la direcci√≥n de la cuerda 
 nodosx=Nodosala(:,4)'; 
-% Matriz de coordenadas de los nodos en la direcciÛn de la cuerda 
+% Matriz de coordenadas de los nodos en la direcci√≥n de la cuerda 
 xp = vec2mat(fliplr(nodosx),nv+1); 
-% Coordenadas de los nodos en la direcciÛn perpendicular al ala 
+% Coordenadas de los nodos en la direcci√≥n perpendicular al ala 
 zp=zeros(mv+1,nv+1); 
 % Calculo de las esquinas de anillos de torbellinos del ala 
 xv = zeros(mv+1,nv+1); 
@@ -136,7 +143,7 @@ mw=cw*mv/c;
 Nodosestela = MatrizNodos(mw,nv,0,0,b,cw); 
 % Posicionamiento de la estela en la geometria global 
 wakepoints=min(xv(mv+1,:))+Nodosestela(:,4)'; 
-% Coordenada x m·s cercana al ala 
+% Coordenada x m√°s cercana al ala 
 xminestela=min(wakepoints); 
 % Diferencia en x ala-estela 
 difxalaestela=xminestela-min(xv(mv+1,:)); 
@@ -148,7 +155,7 @@ xw = vec2mat(fliplr(wakepoints),nv+1);
 yw=repmat(yp(1,:),mw+1,1); 
 % Coordenadas de los nodos, direccion perpendicular al plano de la estela 
 zw=zeros(mw+1,nv+1); 
-%% RepresentaciÛn gr·fica del ala aerodinamica y de la estela 
+%% Representaci√≥n gr√°fica del ala aerodinamica y de la estela 
 figure(100) 
 hmesh1=mesh(xp,yp,zp,'Edgecolor','b','FaceColor','none');
 hold on 
@@ -167,7 +174,7 @@ nz = ones(mv,nv);
 % Dimensionamos nz en una matriz (mv*nv,3) 
 Nall=[reshape(nx',mv*nv,1) reshape(ny',mv*nv,1) reshape(nz',mv*nv,1)]; 
 % Puntos de control y areas de los anillos de torbelinos 
-% InicicializaciÛn de vectores 
+% Inicicializaci√≥n de vectores 
 % Longitud de los anillos de torbellinos en la direccion de la cuerda 
 Dx = zeros(mv,nv); 
 % Longitud de los anillos de torbellinos en la direccion de la envergadura 
@@ -296,28 +303,28 @@ end
 % Matric Pe(0) 
 PI=repmat(eye(nv),mw,1); 
 Pc=sparse([zeros(nv,(mv-1)*nv) eye(nv)]); 
-% C·lculo de L0 
+% C√°lculo de L0 
 L0=(Gy*cos(alpha))*((Ab+Aw*PI*Pc)\Nall(:,3)); 
 % Indices del elemento de L0 y pared perteneciente a la semiala derecha 
 halfind=zeros(1,mv*nv/2); 
 for i=1:mv 
     halfind((i-1)*nv/2+1:i*nv/2)=(i-1)*nv+(nv/2+1:nv); 
 end
-% C·lculo de Q0 
+% C√°lculo de Q0 
 Q0=(L0(halfind).'*wall(halfind,:)).'; 
-%% C·lculo de la velocidad de flameo 
-% Incremento para el c·lculo numÈrico del Jacobiano 
+%% C√°lculo de la velocidad de flameo 
+% Incremento para el c√°lculo num√©rico del Jacobiano 
 dU=1e-8; 
-% HipÛtesis inicial de la velocidad de flameo 
+% Hip√≥tesis inicial de la velocidad de flameo 
 U=20; 
-% HipÛtesis inicial de la frecuencia reducidad de flameo 
+% Hip√≥tesis inicial de la frecuencia reducidad de flameo 
 k=0.2; 
-%% C·lculo de la velocidad de flameo utilizando el mÈtodo de Newton-Raphson 
+%% C√°lculo de la velocidad de flameo utilizando el m√©todo de Newton-Raphson 
 cond=0; 
 while cond == 0 
-    % C·lculo del determinante del flameo 
+    % C√°lculo del determinante del flameo 
     [~,FF]=MFAG(k,mv,nv,mw,cm,Gy,GS,Ab,Aw,Pc,wxall,wall,A,E,rho,U,halfind,alpha,Q0); 
-    % EvaluaciÛn numÈrica del Jacobiano 
+    % Evaluaci√≥n num√©rica del Jacobiano 
     Jac=zeros(2,2); 
     % Con respecto a U 
     U=U+dU; 
@@ -329,20 +336,20 @@ while cond == 0
     [~,FF1]=MFAG(k,mv,nv,mw,cm,Gy,GS,Ab,Aw,Pc,wxall,wall,A,E,rho,U,halfind,alpha,Q0); 
     Jac(:,2)=(FF1-FF)/dU; 
     k=k-dU; 
-    % ResoluciÛn del sistema 
+    % Resoluci√≥n del sistema 
     solma=-Jac\FF; 
-    % C·lculo del criterio de convergencia 
+    % C√°lculo del criterio de convergencia 
     crit=sqrt(solma'*solma); 
-    % ActualizaciÛn de la velocidad aerodin·mica 
+    % Actualizaci√≥n de la velocidad aerodin√°mica 
     U=U+solma(1); 
-    % ActualizaciÛn de la frecuencia reducida 
+    % Actualizaci√≥n de la frecuencia reducida 
     k=k+solma(2); 
     % Prueba de convergencia
     if crit < 1e-12 
         cond=1; 
     end
 end
-% Velocidad aerodin·mica de flameo 
+% Velocidad aerodin√°mica de flameo 
 Uflut=U; 
 % Frecuencia reducida de flameo 
 kflut=k; 
@@ -352,9 +359,9 @@ disp('Velocidad de Flameo (m/s)')
 disp(Uflut) 
 disp('Frecuencia de Flameo(Hz)') 
 disp(omegaflut/2/pi) 
-% HipÛtesis inicial para la velocidad aerodin·mica de divergencia 
+% Hip√≥tesis inicial para la velocidad aerodin√°mica de divergencia 
 U=20; 
-%% C·lculo de la matriz de fuerza aerodin·mica generalizada, frecuencia cero 
+%% C√°lculo de la matriz de fuerza aerodin√°mica generalizada, frecuencia cero 
 Q10=MFAG(0,mv,nv,mw,cm,Gy,GS,Ab,Aw,Pc,wxall,wall,A,E,rho,U,halfind,alpha,Q0); 
 % Calculo de Q0S para el determinante 
 if alpha~=0 
@@ -365,41 +372,41 @@ if alpha~=0
         Q0S(:,i)=Q0; 
     end
 end
-%% C·lculo de la velocidad de divergencia utilizando el mÈtodo de 
+%% C√°lculo de la velocidad de divergencia utilizando el m√©todo de 
 % Newton-Raphson 
 cond=0; 
 while cond == 0 
     if alpha==0 
-        % C·lculo de la funciÛn objetivo 
+        % C√°lculo de la funci√≥n objetivo 
         DD=det(E-rho*U^2*Q10(:,:,1)); 
-        % EvaluaciÛn del Jacobiano numÈricamente 
+        % Evaluaci√≥n del Jacobiano num√©ricamente 
         U=U+dU; 
         DD1=det(E-rho*U^2*Q10(:,:,1)); 
         Jac=(DD1-DD)/dU; 
         U=U-dU; 
-        % ResoluciÛn del sistema de Newton-Raphson 
+        % Resoluci√≥n del sistema de Newton-Raphson 
         solma=-Jac\DD; 
-        % C·lculo del criterio de convergencia 
+        % C√°lculo del criterio de convergencia 
         crit=sqrt(solma'*solma); 
-        % ActualizaciÛn de la velocidad aerodin·mica 
+        % Actualizaci√≥n de la velocidad aerodin√°mica 
         U=U+solma; 
         % Prueba de convergencia 
         if crit < 1e-12 
             cond=1; 
         end
     else
-        % C·lculo de la funciÛn objetivo 
+        % C√°lculo de la funci√≥n objetivo 
         DD=det((E-rho*U^2*Q10(:,:,1))./(-rho*U^2*Q0S*sin(alpha)))-1; 
-        % EvaluaciÛn del Jacobiano numÈricamente 
+        % Evaluaci√≥n del Jacobiano num√©ricamente 
         U=U+dU; 
         DD1=det((E-rho*U^2*Q10(:,:,1))./(-rho*U^2*Q0S*sin(alpha)))-1;
         Jac=(DD1-DD)/dU; 
         U=U-dU; 
-        % ResoluciÛn del sistema de Newton-Raphson 
+        % Resoluci√≥n del sistema de Newton-Raphson 
         solma=-Jac\DD; 
-        % C·lculo del criterio de convergencia 
+        % C√°lculo del criterio de convergencia 
         crit=sqrt(solma'*solma); 
-        % ActualizaciÛn de la velocidad aerodin·mica 
+        % Actualizaci√≥n de la velocidad aerodin√°mica 
         U=U+solma; 
         % Prueba de convergencia 
         if crit < 1e-12 
@@ -407,14 +414,14 @@ while cond == 0
         end
     end
 end
-%% Velocidad aerodin·mica de divergencia est·tica 
+%% Velocidad aerodin√°mica de divergencia est√°tica 
 Udiv=U; 
 disp('Velocidad de divergencia estatica (m/s)') 
 disp(Udiv)
 
 %%
 function [Q1,FF]=MFAG(k,mv,nv,mw,cm,Gy,GS,Ab,Aw,Pc,wxall,wall,A,E,rho,U,halfind,~,~) 
-% C·lculo de la matriz de fuerzas aerodin·micas generalizada para un ala rectangular usando el metodo del Vortex Lattice. 
+% C√°lculo de la matriz de fuerzas aerodin√°micas generalizada para un ala rectangular usando el metodo del Vortex Lattice. 
 % Tambien calcula el determinante del flameo. 
 % Angulo de ataque debe ser cero alpha=0; 
 % Calculo de la matriz Pe 
@@ -423,10 +430,10 @@ Pe=sparse(kron(exp(-1j*2*k/mv*(1:mw)'),eye(nv)));
 L1=(Gy*cos(alpha)+1j*k/cm*GS)*((Ab+Aw*Pe*Pc)\(wxall+1j*k/cm*wall)); 
 % Calculo de la matriz Q1 
 Q1=(L1(halfind,:).'*wall(halfind,:)).'; 
-% Calculo de la matriz completa aeroel·stica 
+% Calculo de la matriz completa aeroel√°stica 
 aeromat=-(k*U/cm)^2*A+E-rho*U^2*Q1; 
-% Calculo del determinante de la matriz aeroel·stica 
+% Calculo del determinante de la matriz aeroel√°stica 
 flut_det=det(aeromat); 
-% Calculo de la funciÛn objetivo 
+% Calculo de la funci√≥n objetivo 
 FF=[real(flut_det);imag(flut_det)]; 
 end
