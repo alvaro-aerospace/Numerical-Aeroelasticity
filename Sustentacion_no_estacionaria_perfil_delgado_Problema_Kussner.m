@@ -1,5 +1,12 @@
-%% SOLUCI覰 NUM蒖ICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
+%% SOLUCI脫N NUM脡RICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
 %% PERFIL ENTRANDO EN UNA RAFAGA. FUNCION DE KUSSNER 
+% 
+% Autor: 脕lvaro Fern谩ndez Villar
+% Este c贸digo forma parte del trabajo final de M谩ster: 
+% Soluci贸n num茅rica de problemas aerodin谩micos no estacionarios mediante el m茅todo de la malla de torbellinos.
+% Consultar trabajo para m谩s referencias.
+%
+%-----------------------------------------------------------C脫DIGO----------------------------------------------------------------------%
 
 %% Datos de entrada 
 % Numero de paneles en el perfil 
@@ -149,9 +156,9 @@ hold on;
 plot(tau,real(cl),'Linewidth',2,'color','red')
 % Coeficiente de sustentacion obtenido por la funcion de Kussner 
 plot(tau,real(clexacto),'-d','MarkerIndices',1:10:length(clexacto), 'Linewidth',2,'color','black') 
-title(['Coeficiente de Sustentaci髇 CL(\tau), n=' num2str(n) ', m=' num2str(m) ', w0=' num2str(w0) ', \Delta\xi=' num2str(dxw)]) 
+title(['Coeficiente de Sustentaci贸n CL(\tau), n=' num2str(n) ', m=' num2str(m) ', w0=' num2str(w0) ', \Delta\xi=' num2str(dxw)]) 
 xlabel('Tiempo adimensional \tau, tau=t/Tr, Tr=b/U\infty');
-ylabel('Coeficiente de Sustentaci髇 CL(\tau)'); 
+ylabel('Coeficiente de Sustentaci贸n CL(\tau)'); 
 legend('Solucion numerica', 'Solucion Kussner');
 
 %% Funcion de Kusnner
