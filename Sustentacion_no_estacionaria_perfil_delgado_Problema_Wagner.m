@@ -1,5 +1,12 @@
-%% SOLUCI覰 NUM蒖ICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
+%% SOLUCI脫N NUM脡RICA NO ESTACIONARIA PARA PERFILES DELGADOS. 
 % VARIACION REPENTINA DEL ANGULO DE INCIDENCIA EN EL PERFIL. FUNCION WAGNER 
+% 
+% Autor: 脕lvaro Fern谩ndez Villar
+% Este c贸digo forma parte del trabajo final de M谩ster: 
+% Soluci贸n num茅rica de problemas aerodin谩micos no estacionarios mediante el m茅todo de la malla de torbellinos.
+% Consultar trabajo para m谩s referencias.
+%
+%-----------------------------------------------------------C脫DIGO----------------------------------------------------------------------%
 
 %% Datos de entrada 
 % Numero de paneles en el perfil 
@@ -173,9 +180,9 @@ plot(tau,real(cl)/(deg2rad(10)),'Linewidth',2,'color','red')
 % Coeficiente de sustentacion obtenido por la funcion de Kussner 
 plot(tau,real(clexacto)/deg2rad(10),'-d','MarkerIndices',1:10:length(clexacto),'Linewidth',1,'color','black') 
 plot(tau,clest,'Linewidth',2,'color','blue') 
-title(['Coeficiente de Sustentaci髇 CL(\tau), n=' num2str(n) ', m=' num2str(m) ', \Delta\xi=' num2str(dxw)] ) 
+title(['Coeficiente de Sustentaci贸n CL(\tau), n=' num2str(n) ', m=' num2str(m) ', \Delta\xi=' num2str(dxw)] ) 
 xlabel('Tiempo adimensional \tau, tau=t/Tr, Tr=b/U\infty') 
-ylabel('Coeficiente de Sustentaci髇 CL(\tau)/\Delta\alpha') 
+ylabel('Coeficiente de Sustentaci贸n CL(\tau)/\Delta\alpha') 
 legend('Solucion numerica', 'Solucion Wagner','Solucion estacionaria: 2\pi') 
 axis([0,50,0,10])
 
