@@ -4,7 +4,6 @@
 % Autor: Álvaro Fernández Villar
 % Este código forma parte del trabajo final de Máster: 
 % Solución numérica de problemas aerodinámicos no estacionarios mediante el método de la malla de torbellinos.
-% Universidad Politécnica de Valencia
 % Consultar trabajo para más referencias.
 %
 %-----------------------------------------------------------CÓDIGO----------------------------------------------------------------------%
