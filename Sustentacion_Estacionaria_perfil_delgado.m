@@ -1,5 +1,12 @@
 %% SOLUCIÓN NUMÉRICA ESTACIONARIA PARA PERFILES DELGADOS. 
 %% PERFIL SIN CURVATURA CON ANGULO DE ATAQUE 
+% 
+% Autor: Álvaro Fernández Villar
+% Este código forma parte del trabajo final de Máster: 
+% Solución numérica de problemas aerodinámicos no estacionarios mediante el método de la malla de torbellinos.
+% Consultar trabajo para más referencias.
+%
+%-----------------------------------------------------------CÓDIGO----------------------------------------------------------------------%
 
 %% Datos de entrada 
 % Numero de paneles 
