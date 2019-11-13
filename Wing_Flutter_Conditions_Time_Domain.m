@@ -96,19 +96,19 @@ legend(hplot([1 (nl+2)*nmodos+1 (nl+2)*nmodos+2]),{'\lambda',string1,string2})
 
 %%
 function [err,S,Qbar]=RFA(nmodos,nl,gammai,Qmat,kvec) 
-% C醠culo de la funci髇 racional de aproximacion de la matriz de fuerzas 
-% aerodin醡icas generalizadas. 
-% N鷐ero de frecuencias reducidas 
+% C谩lculo de la funci贸n racional de aproximacion de la matriz de fuerzas 
+% aerodin谩micas generalizadas. 
+% N煤mero de frecuencias reducidas 
 nk=length(kvec);
-% Inicializaci髇 de matrices de coeficientes para la funcion racional de 
-% aproximaci髇 
+% Inicializaci贸n de matrices de coeficientes para la funcion racional de 
+% aproximaci贸n 
 S=zeros(nmodos,nmodos,3+nl); 
 % Coeficiente constante 
 S(:,:,1)=Qmat(:,:,1); 
-% Configuraci髇 del ajuste de la curva. El ajuste se lleva a cabo para cada 
-% elemento de la matriz de fuerza aerodin醡ica generalizada por separado. 
+% Configuraci贸n del ajuste de la curva. El ajuste se lleva a cabo para cada 
+% elemento de la matriz de fuerza aerodin谩mica generalizada por separado. 
 % Creacion de la matriz del lado izquierdo. Esta matriz es la misma para 
-% todos los elementos de la matriz de fuerza aerodin醡ica generalizada. 
+% todos los elementos de la matriz de fuerza aerodin谩mica generalizada. 
 LHS=zeros(nk,2+nl); 
 LHS(:,1:2)=[1i*kvec -kvec.^2]; 
 for inl=1:nl 
@@ -131,10 +131,10 @@ for i=1:nmodos
         end
     end
 end
-% C醠culo de la matriz Q1 reconstruida 
+% C谩lculo de la matriz Q1 reconstruida 
 Qbar=zeros(nmodos,nmodos,nk); 
 for ik=1:nk 
-    % Aproximaci髇 de Roger 
+    % Aproximaci贸n de Roger 
     Qbar(:,:,ik)=S(:,:,1)+S(:,:,2)*1i*kvec(ik)-S(:,:,3)*kvec(ik)^2; 
     for inl=1:nl 
         Qbar(:,:,ik)=Qbar(:,:,ik)+S(:,:,3+inl)*1i*kvec(ik)/(1i*kvec(ik)+gammai(inl)); 
@@ -149,20 +149,20 @@ end
 %%
 function [H,h0,Mbar]=FlameoRFA_linmat(U,rho,cm,A,E,S,Q0,gammai,nmodos,nl) 
 % Calcula las matrices lineales de las ecuaciones del movimiento de primer orden 
-% de un ala en voladizo en flujo incompresible con la funci髇 de aproximaci髇 
-% racional aerodin醡ica. 
+% de un ala en voladizo en flujo incompresible con la funci贸n de aproximaci贸n 
+% racional aerodin谩mica. 
 % Matriz total de masa 
 Mbar=A-rho*cm^2*S(:,:,3); 
 % Matriz total de amortiguamiento 
 Cbar=-rho*U*cm*S(:,:,2);
 % Matriz total de rigidez 
 Kbar=E-rho*U^2*S(:,:,1); 
-% Matrices de estados aerodin醡icos 
+% Matrices de estados aerodin谩micos 
 Sbar=zeros(nmodos,nl*nmodos); 
 for inl=1:nl 
     Sbar(:,nmodos*(inl-1)+1:nmodos*inl)=-rho*U^2*S(:,:,3+inl); 
 end
-% Ecuaci髇 de estado aerodin醡ico 
+% Ecuaci贸n de estado aerodin谩mico 
 WW0=zeros(nl*nmodos,2*nmodos); 
 WW1=zeros(nl*nmodos,nl*nmodos); 
 for inl=1:nl 
