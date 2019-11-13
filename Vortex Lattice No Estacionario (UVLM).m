@@ -1,7 +1,15 @@
 % SOLUCION NUMERICA NO ESTACIONARIA PARA EL CASO TRIDIMENSIONAL. (UVLM) 
-% CONDICI覰 DE FRONTERA: SALTO DE VELOCIDAD 
+% CONDICI脫N DE FRONTERA: SALTO DE VELOCIDAD 
+% 
+% Autor: 脕lvaro Fern谩ndez Villar
+% Este c贸digo forma parte del trabajo final de M谩ster: 
+% Soluci贸n num茅rica de problemas aerodin谩micos no estacionarios mediante el m茅todo de la malla de torbellinos.
+% Universidad Polit茅cnica de Valencia
+% Consultar trabajo para m谩s referencias.
+%
+%-----------------------------------------------------------C脫DIGO----------------------------------------------------------------------%
 
-% Par醡etros geom閠ricos del ala 
+% Par谩metros geom茅tricos del ala 
 % Dimensiones del ala 
 % Longitud de la cuerda en el encastre 
 cr=1; 
@@ -13,39 +21,39 @@ LF=0;
 LR=0; 
 % Salto de velocidad (condicion de frontera) 
 Usalto=1; 
-% 羘gulo de ataque 
+% 脕ngulo de ataque 
 alpha=5*pi/180; 
-% Par醡etros de discretizaci髇 de la geometr韆 alar y de la estela 
-% N鷐ero de paneles en la direcci髇 de la envergadura 
+% Par谩metros de discretizaci贸n de la geometr铆a alar y de la estela 
+% N煤mero de paneles en la direcci贸n de la envergadura 
 nv=20; 
-% N鷐ero de paneles en la direcci髇 de la cuerda 
+% N煤mero de paneles en la direcci贸n de la cuerda 
 mv=16; 
 % Densidad del aire 
 rho=1.225; 
-% Longitud de la estela en t閞minos de cuerda en el encastre 
+% Longitud de la estela en t茅rminos de cuerda en el encastre 
 cw=10*cr; 
-% Par醡etros de discretizaci髇 temporal 
-% N鷐ero de pasos temporales 
+% Par谩metros de discretizaci贸n temporal 
+% N煤mero de pasos temporales 
 ntimes=160; 
-% C醠culo del paso temporal 
+% C谩lculo del paso temporal 
 dt=cr/mv/(Usalto); 
-% Creaci髇 del vector de tiempos 
+% Creaci贸n del vector de tiempos 
 ti=(0:ntimes-1)*dt; 
-% Calculos de generaci髇 de la geometr韆 global del problema 
-% C醠culo de los nodos de los paneles del ala 
-% C醠culo de los nodos del ala 
+% Calculos de generaci贸n de la geometr铆a global del problema 
+% C谩lculo de los nodos de los paneles del ala 
+% C谩lculo de los nodos del ala 
 Nodosala = MatrizNodos(mv,nv,LF,LR,b,cr); 
-% Coordendas de los nodos en la direcci髇 de la envergadura 
+% Coordendas de los nodos en la direcci贸n de la envergadura 
 nodosy=Nodosala(:,5)'; 
-% Matriz de coordenadas de los nodos en la direcci髇 de la envergadura 
+% Matriz de coordenadas de los nodos en la direcci贸n de la envergadura 
 yp=vec2mat(nodosy,nv+1); 
-% Coordendas de los nodos en la direcci髇 de la cuerda 
+% Coordendas de los nodos en la direcci贸n de la cuerda 
 nodosx=Nodosala(:,4)'; 
-% Matriz de coordenadas de los nodos en la direcci髇 de la cuerda
+% Matriz de coordenadas de los nodos en la direcci贸n de la cuerda
 xp = vec2mat(fliplr(nodosx),nv+1); 
-% Coordenadas de los nodos en la direcci髇 perpendicular al ala 
+% Coordenadas de los nodos en la direcci贸n perpendicular al ala 
 zp=zeros(mv+1,nv+1); 
-% C醠culo de las esquinas de los anillos de torbellinos del ala 
+% C谩lculo de las esquinas de los anillos de torbellinos del ala 
 xv = zeros(mv+1,nv+1); 
 yv = zeros(mv+1,nv+1); 
 zv = zeros(mv+1,nv+1); 
@@ -56,7 +64,7 @@ for j=1:nv+1
         yv(i,j)= yp(i,j); 
         zv(i,j)= zp(i,j)+(zp(i+1,j)-zp(i,j))/4; 
     end
-    % 趌timo segmento de los anillos de torbellino del borde de fuga 
+    % 脷ltimo segmento de los anillos de torbellino del borde de fuga 
     xv(mv+1,j) = xp(mv+1,j)+ 0.25*cr/mv; 
     yv(mv+1,j) = yp(mv+1,j); 
     zv(mv+1,j)= zp(mv+1,j); 
@@ -68,7 +76,7 @@ mw=cw*mv/cr;
 Nodosestela = MatrizNodos(mw,nv,LR,0,b,cw); 
 % Posicionamiento de la estela en la geometria global 
 wakepoints=min(xv(mv+1,:))+Nodosestela(:,4)'; 
-% Coordenada x m醩 cercana al ala 
+% Coordenada x m谩s cercana al ala 
 xminestela=min(wakepoints); 
 % Diferencia en x ala-estela 
 difxalaestela=xminestela-min(xv(mv+1,:)); 
@@ -80,7 +88,7 @@ xw = vec2mat(fliplr(wakepoints),nv+1);
 yw=repmat(yp(1,:),mw+1,1); 
 % Matriz de coordenadas de los nodos, direccion normal al plano del ala 
 zw=zeros(mw+1,nv+1); 
-% Representaci髇 gr醘ica del ala y de la estela 
+% Representaci贸n gr谩fica del ala y de la estela 
 figure(100) 
 hmesh1=mesh(xp,yp,zp,'Edgecolor','black','FaceColor','none'); 
 hold on 
@@ -92,12 +100,12 @@ zlabel('z')
 ylim([-b/2 b/2]) 
 legend([hmesh1(1) hmesh2(1) hmesh3(1)], 'Paneles Geometricos','Anillos del ala','Anillos de la estela') 
 pbaspect([1 b/cr 1]) 
-% Puntos de control, dimensiones y 醨eas de los anillos de torbellino 
-% Inicializaci髇 de las longitudes de los anillos. Direccion cuerda 
+% Puntos de control, dimensiones y 谩reas de los anillos de torbellino 
+% Inicializaci贸n de las longitudes de los anillos. Direccion cuerda 
 Dx = zeros(mv,nv);
-% Inicializaci髇 de las longitudes de los anillos. Direccion envergadura 
+% Inicializaci贸n de las longitudes de los anillos. Direccion envergadura 
 Dy = zeros(mv,nv); 
-% Inicializaci髇 de los vectores de coordenadas de los puntos de control 
+% Inicializaci贸n de los vectores de coordenadas de los puntos de control 
 % en los anillos de torbellino del ala 
 xc = zeros(mv,nv); 
 yc = zeros(mv,nv); 
@@ -109,14 +117,14 @@ ywc = zeros(mw,nv);
 zwc = zeros(mw,nv); 
 for i=1:mv 
     for j=1:nv 
-        % C醠culo de las posiciones de los puntos de control 
+        % C谩lculo de las posiciones de los puntos de control 
         dxv = (xp(i+1,j) - xp(i,j)+xp(i+1,j+1) - xp(i,j+1))/2; 
         dzv = (zp(i+1,j) - zp(i,j)+zp(i+1,j+1) - zp(i,j+1))/2; 
         xc(i,j) = (xp(i,j)+xp(i+1,j)+xp(i,j+1)+xp(i+1,j+1))/4+dxv/4; 
         yc(i,j) = (yp(i,j)+yp(i+1,j)+yp(i,j+1)+yp(i+1,j+1))/4; 
         zc(i,j) = (zp(i,j)+zp(i+1,j)+zp(i,j+1)+zp(i+1,j+1))/4+dzv/4; 
-        % C醠culo de las longitudes de los torbellinos 
-        % Asegurarse que Dx y Dy quedan sim閠ricos alrededor del encastre 
+        % C谩lculo de las longitudes de los torbellinos 
+        % Asegurarse que Dx y Dy quedan sim茅tricos alrededor del encastre 
         if j <= nv/2 
             Dx(i,j)=sqrt((xv(i+1,j)-xv(i,j))^2+(yv(i+1,j)-yv(i,j))^2+(zv(i+1,j)-zv(i,j))^2); 
             Dy(i,j)=sqrt((xv(i,j+1)-xv(i,j))^2+(yv(i,j+1)-yv(i,j))^2+(zv(i,j+1)-zv(i,j))^2); 
@@ -129,19 +137,19 @@ end
 % Calculo de los puntos de control en la estela 
 for i=1:mw 
     for j=1:nv 
-        % C醠culo de las posiciones de los puntos de control 
+        % C谩lculo de las posiciones de los puntos de control 
         xwc(i,j) = (xw(i,j)+xw(i+1,j))/2; 
         ywc(i,j) = (yw(i,j)+yw(i,j+1))/2; 
         zwc(i,j) = zw(i,j); 
     end
 end
-% C醠culo de los vectores normales 
+% C谩lculo de los vectores normales 
 nx = zeros(mv,nv); 
 ny = zeros(mv,nv); 
 nz = ones(mv,nv);
 % Areas de los anillos de torbellinos 
 S=Dx.*Dy; 
-% Conversi髇 de las matrices mv x nv a vectores mv*nv x 1 
+% Conversi贸n de las matrices mv x nv a vectores mv*nv x 1 
 nvec=[reshape(nx',mv*nv,1) reshape(ny',mv*nv,1) reshape(nz',mv*nv,1)]; 
 Dyvec=reshape(Dy',mv*nv,1); Svec=reshape(S',mv*nv,1); 
 % Calculo de la influencia de los torbellinos del ala en el ala 
@@ -162,15 +170,15 @@ for ic=1:mv
                 uvw4=segmentotorbellino(xc(ic,jc),yc(ic,jc),zc(ic,jc),xv(i+1,j),yv(i+1,j),zv(i+1,j),xv(i,j),yv(i,j),zv(i,j)); 
                 % Suma de todas las velocidades inducidas 
                 uvw=uvw1+uvw2+uvw3+uvw4; 
-                % C醠culo de los coeficientes de influencia 
+                % C谩lculo de los coeficientes de influencia 
                 Ab((ic-1)*nv+jc,(i-1)*nv+j)=dot(uvw,nvec((ic-1)*nv+jc,:)); 
             end
         end
     end
 end
-% C醠culo de la influencia de la estela en el ala 
+% C谩lculo de la influencia de la estela en el ala 
 disp('Calculando la matriz de coeficientes de influencia de la estela') 
-% Inicializaci髇 de la matriz de coeficientes de influencia de la estela 
+% Inicializaci贸n de la matriz de coeficientes de influencia de la estela 
 Aw = zeros(mv*nv,mw*nv); 
 for ic=1:mv 
     for jc=1:nv 
@@ -186,13 +194,13 @@ for ic=1:mv
                 uvw4=segmentotorbellino(xc(ic,jc),yc(ic,jc),zc(ic,jc),xw(i+1,j),yw(i+1,j),zw(i+1,j),xw(i,j),yw(i,j),zw(i,j)); 
                 % Suma de todas las velocidades inducidas 
                 uvw=uvw1+uvw2+uvw3+uvw4; 
-                % C醠culo de los coeficientes de influencia 
+                % C谩lculo de los coeficientes de influencia 
                 Aw((ic-1)*nv+jc,(i-1)*nv+j)=dot(uvw,nvec((ic-1)*nv+jc,:)); 
             end
         end
     end
 end
-% Matrices de propagaci髇 de la estela 
+% Matrices de propagaci贸n de la estela 
 Pb=[zeros(nv,(mv-1)*nv) eye(nv,nv);zeros((mw-1)*nv,(mv-1)*nv) zeros((mw-1)*nv,nv)]; 
 Pw=[zeros(nv,(mw-1)*nv) zeros(nv,nv);eye((mw-1)*nv,(mw-1)*nv) zeros((mw-1)*nv,nv)]; 
 Pb=sparse(Pb); 
@@ -200,7 +208,7 @@ Pw=sparse(Pw);
 % Matrices de coeficientes para el calculo de la sustentacion 
 Gy=eye(mv*nv)+[zeros(nv,(mv-1)*nv) zeros(nv,nv);-eye((mv-1)*nv, (mv-1)*nv) zeros((mv-1)*nv,nv)]; 
 Gy=sparse(Gy.*repmat(Dyvec,1,mv*nv)); GS=sparse(eye(mv*nv).*repmat(Svec,1,mv*nv)); 
-% Inicializaci髇 de las matrices soluci髇 
+% Inicializaci贸n de las matrices soluci贸n 
 % Fuerza de los torbellinos de fronteras 
 Gammab=zeros(mv*nv,ntimes); 
 % Derivada en tiempo de las fuerzas de los torbellinos de fronteras 
@@ -208,24 +216,24 @@ Gammabdot=zeros(mv*nv,ntimes);
 % Fuerzas de los torbellinos de la estela 
 Gammaw=zeros(mw*nv,1); 
 Gammawt=zeros(mw*nv,ntimes); 
-% Distribuci髇 de presiones 
+% Distribuci贸n de presiones 
 p=zeros(mv*nv,ntimes); 
-% Distribuci髇 de la sustentaci髇 
+% Distribuci贸n de la sustentaci贸n 
 l=zeros(mv*nv,ntimes); 
-% Distribuci髇 del coeficiente de sustentaci髇 
+% Distribuci贸n del coeficiente de sustentaci贸n 
 cl=zeros(mv*nv,ntimes); 
 % Matriz de superficies para el calculo de p 
 Svecmat=zeros(mv*nv,ntimes); 
 % Inicio del bucle temporal: Calculo de las presiones y la sustentacion 
 for it=1:ntimes 
     if it > 1 
-        % Propagaci髇 de la estela 
+        % Propagaci贸n de la estela 
         Gammaw=Pb*Gammab(:,it-1)+Pw*Gammaw; 
         Gammawt(:,it)=Gammaw; 
     end
-    % C醠culo de la vorticidad de las fronteras 
+    % C谩lculo de la vorticidad de las fronteras 
     Gammab(:,it)=Ab\(-(Usalto)*sin(alpha)*nvec(:,3)-Aw*Gammaw); 
-    % C醠culo de la derivada en el tiempo de la vorticidad de las fronteras 
+    % C谩lculo de la derivada en el tiempo de la vorticidad de las fronteras 
     if it > 1 
         Gammabdot(:,it)=(Gammab(:,it)-Gammab(:,it-1))/dt; 
     else
@@ -247,9 +255,9 @@ figure(1)
 plot(ti,CL,'color','black','LineWidth',2); 
 xlabel('t(s)') 
 ylabel('CL') 
-title(['Coeficiente de sustentaci髇 total, CL(x,y,t), (mv = ', num2str(mv),', nv = ',num2str(nv), ')']) 
+title(['Coeficiente de sustentaci贸n total, CL(x,y,t), (mv = ', num2str(mv),', nv = ',num2str(nv), ')']) 
 grid 
-% Representacion de la 鷏tima distribucion de la sustentacion 
+% Representacion de la 煤ltima distribucion de la sustentacion 
 figure(2) 
 mesh(xp,yp,zp); 
 hold on; 
@@ -259,9 +267,9 @@ surf(xc,yc,lend);
 xlabel('Cuerda (metros)') 
 ylabel('Envergadura (metros)') 
 zlabel('l(x,y) (Newton)') 
-title(['Distribuci髇 de la sustentaci髇 en t_f_i_n_a_l, l(x,y), (mv = ', num2str(mv),', nv = ',num2str(nv), ')']) 
+title(['Distribuci贸n de la sustentaci贸n en t_f_i_n_a_l, l(x,y), (mv = ', num2str(mv),', nv = ',num2str(nv), ')']) 
 grid on colorbar 
-% Representacion de la 鷏tima distribucion de presiones 
+% Representacion de la 煤ltima distribucion de presiones 
 figure(3) 
 mesh(xp,yp,zp); 
 hold on 
@@ -271,7 +279,7 @@ h=surf(xc,yc,pend);
 xlabel('Cuerda (metros)') 
 ylabel('Envergadura (metros)') 
 zlabel('p(x,y) (Newton/m^2)') 
-title(['Distribuci髇 de la presion en t_f_i_n_a_l, p(x,y), (nx = ', num2str(mv),', ny = ',num2str(nv), ')']) 
+title(['Distribuci贸n de la presion en t_f_i_n_a_l, p(x,y), (nx = ', num2str(mv),', ny = ',num2str(nv), ')']) 
 grid on 
 colorbar
 
@@ -308,8 +316,8 @@ function [R] = CoordenadasPuntoInterior(xi,eta,LF,LR,b,cr)
 % R: Coordenadas R(x,y) del punto 
 % xi: Coordenada 'x' adimensional con la cuerda 
 % eta: Coordenada 'y' adimensional con la cuerda 
-% LF: 羘gulo de flecha frontal en grados (borde ataque) 
-% LR: 羘gulo de flecha posterior en grados (borde salida) 
+% LF: 脕ngulo de flecha frontal en grados (borde ataque) 
+% LR: 脕ngulo de flecha posterior en grados (borde salida) 
 % b: Envergadura en metros 
 % cr: Cuerda en el encastre en metros 
 
@@ -319,7 +327,7 @@ function [R] = CoordenadasPuntoInterior(xi,eta,LF,LR,b,cr)
                 % eta<0 (el punto se encuentra en el semi-ala izquierda) 
                 % eta>0 (el punto se encuentra en el semi-ala derecha) 
 %
-% El punto en cuesti髇 se encuentra a 100xi(%) del borde de ataque 
+% El punto en cuesti贸n se encuentra a 100xi(%) del borde de ataque 
 % para el valor correspondiente eta. 
 % 
 %               xi=0 (punto situado en el borde de ataque) 
@@ -344,8 +352,8 @@ function [fila,columna] = FilaColumnaNodo(k,py)
 % fila: Fila del nodo 
 % columna: Columna del nodo 
 % k: Numeracion del nodo 
-% py: N鷐ero de nodos en direccion de la envergadura 
-% Obtenemos los n鷐eros naturales A y B tales que "k = A * py + B" 
+% py: N煤mero de nodos en direccion de la envergadura 
+% Obtenemos los n煤meros naturales A y B tales que "k = A * py + B" 
 A = floor(k/py); 
 % Parte entera 
 B = k - A * py; 
@@ -360,24 +368,24 @@ end
 end
 
 function [Mn] = MatrizNodos(nx,ny,LF,LR,b,cr) 
-    % nx: N鷐ero de paneles en direcci髇 x 
-    % ny: N鷐ero de paneles en direcci髇 y 
-    % LF: 羘gulo de flecha frontal en grados (borde ataque) 
-    % LR: 羘gulo de flecha posterior en grados (borde salida) 
+    % nx: N煤mero de paneles en direcci贸n x 
+    % ny: N煤mero de paneles en direcci贸n y 
+    % LF: 脕ngulo de flecha frontal en grados (borde ataque) 
+    % LR: 脕ngulo de flecha posterior en grados (borde salida) 
     % b: Envergadura 
-    % cr: Cuerda en la ra韟 
+    % cr: Cuerda en la ra铆z 
     % La matriz Mn numera los nodos y asocia a cada uno sus coordenadas y otros 
     % datos 
-    % N鷐ero de nodos en total
-    % Puntos (nodos) en direcci髇 x 
+    % N煤mero de nodos en total
+    % Puntos (nodos) en direcci贸n x 
     px = nx + 1; 
-    % Puntos (nodos) en direcci髇 y 
+    % Puntos (nodos) en direcci贸n y 
     py = ny + 1; 
     % En total "P" puntos o nodos 
     P = px * py ; 
     % El nodo "1" es el situado en la esquina caracterizada por 
-    % - Si el ala es recta y rectangular el que que tiene "y" m醩 negativo 
-    % - Si el ala es recta y rectangular el que que tiene "x" m醩 positivo 
+    % - Si el ala es recta y rectangular el que que tiene "y" m谩s negativo 
+    % - Si el ala es recta y rectangular el que que tiene "x" m谩s positivo 
     % 
     % Con el eje "x" hacia abajo y el eje "y" hacia la derecha es el de la 
     % esquina inferior-izquierda. 
@@ -388,7 +396,7 @@ function [Mn] = MatrizNodos(nx,ny,LF,LR,b,cr)
     % Ejemplo nx = 3, ny = 4, N=3*4 = 12 
     % px = 4, py = 5, P=4*5 = 20 
     % 
-    % Matriz de nodos (numeraci髇 k=1,...20) 
+    % Matriz de nodos (numeraci贸n k=1,...20) 
     % Matriz de paneles [1]...[N=12]
     % 
     % f=4 16--------17---------18---------19----------20----------------(y) 
@@ -403,28 +411,28 @@ function [Mn] = MatrizNodos(nx,ny,LF,LR,b,cr)
     %                           | 
     %                           | 
     %                          (x) 
-    % Configuraci髇 matriz P 
+    % Configuraci贸n matriz P 
     % 
-    % columna 1: Numeraci髇 del nodo (k) 
+    % columna 1: Numeraci贸n del nodo (k) 
     % columna 2: fila del panel en la "matriz" de paneles (f) 
     % columna 3: columna del panel en la "matriz" de paneles (c) 
     % columna 4: Coordenada x del nodo k 
     % columna 5: Coordenada y del nodo k
     %
-    % Inicializaci髇 matriz de paneles 
+    % Inicializaci贸n matriz de paneles 
     Mn = zeros(P,5); 
-    % Numeraci髇 de paneles 
+    % Numeraci贸n de paneles 
     Mn(:,1) = 1:P; 
     for k=1:P 
         % Fila y columna 
         [f,c] = FilaColumnaNodo(k,py); 
-        % Asignaci髇 a las columnas de P 
+        % Asignaci贸n a las columnas de P 
         Mn(k,2) = f; 
         Mn(k,3) = c; 
         % Coordenadas adimensionales del punto 
         xi = 1 - (f - 1)/nx; 
         eta = 2*(c - 1)/ny - 1; 
-        % C醠culo de las coordenadas del punto 
+        % C谩lculo de las coordenadas del punto 
         R = CoordenadasPuntoInterior(xi,eta,LF,LR,b,cr);
         x = R(1); 
         y = R(2); 
@@ -434,20 +442,20 @@ function [Mn] = MatrizNodos(nx,ny,LF,LR,b,cr)
 end
 
 function uvw=segmentotorbellino(x,y,z,x1,y1,z1,x2,y2,z2) 
-% C醠culo de la velocidad inducida (u,v,w) en un punto (x,y,z) debido a un 
+% C谩lculo de la velocidad inducida (u,v,w) en un punto (x,y,z) debido a un 
 % segmento de torbellino de coordenadas (x1,y1,z1) a (x2,y2,z2) y fuerza 
 % la unidad. 
 % Distancia entre (x,y,z) y (x1,y1,z1) 
 dist1=[x y z]-[x1 y1 z1]; 
 % Distancia entre (x,y,z) y (x1,y1,z1) 
 dist2=[x y z]-[x2 y2 z2]; 
-% C醠culo del producto vectorial 
+% C谩lculo del producto vectorial 
 crossprod=cross(dist1,dist2); 
-% C醠culo de la fracci髇 
+% C谩lculo de la fracci贸n 
 fraction=crossprod/(crossprod*crossprod'); 
-% C醠culo del producto escalar 
+% C谩lculo del producto escalar 
 dotprod=dot(([x2 y2 z2]-[x1 y1 z1]),(dist1/sqrt(dist1*dist1')-dist2/sqrt(dist2*dist2'))); 
-% C醠culo de la influencia total 
+% C谩lculo de la influencia total 
 uvw=1/4/pi*fraction*dotprod; 
 end
         
