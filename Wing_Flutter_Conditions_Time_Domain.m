@@ -2,6 +2,14 @@
 % CALCULA LAS MATRICES LINEALES DE LAS ECUACIONES DEL MOVIMIENTO DE UN ALA
 % SEMIEMPOTRADA EN FLUJO INCOMPRESIBLE Y LA FUNCION DE APROXIMACION RACIONAL
 % RFA. DOMINIO DEL TIEMPO. CONDICIONES DE FLAMEO Y CURVAS DE FLAMEO
+% 
+% Autor: Álvaro Fernández Villar
+% Este código forma parte del trabajo final de Máster: 
+% Solución numérica de problemas aerodinámicos no estacionarios mediante el método de la malla de torbellinos.
+% Consultar trabajo para más referencias.
+%
+%-----------------------------------------------------------CÓDIGO----------------------------------------------------------------------%
+
 
 FLAMEO3DDOMINIOFRECUENCIA
 
